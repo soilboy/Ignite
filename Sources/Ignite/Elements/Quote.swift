@@ -61,8 +61,8 @@ public struct Quote: BlockElement {
             return """
             <blockquote class="blockquote">\
             \(renderedContents)\
-            <footer class="blockquote-footer">\(renderedCaption)</footer>\
-            </blockquote>
+            </blockquote>\
+            <p class="blockquote-footer">\(renderedCaption)</p>
             """
         }
     }
