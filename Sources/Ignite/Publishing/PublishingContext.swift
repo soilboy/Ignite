@@ -263,14 +263,16 @@ public class PublishingContext {
 
         return await theme.render(page: page, context: self).render(context: self)
     }
+    
+    /// Creates a unique list of sorted tags from across the site, starting
+    /// with `nil` for the "all tags" page.
+    public var tags: [String?] {
+        [nil] + Set(allContent.flatMap(\.tags)).sorted()
+    }
 
     /// Generates all tags pages, including the "all tags" page.
     func generateTagPages() async throws {
         if site.tagPage is EmptyTagPage { return }
-
-        /// Creates a unique list of sorted tags from across the site, starting
-        /// with `nil` for the "all tags" page.
-        let tags: [String?] = [nil] + Set(allContent.flatMap(\.tags)).sorted()
 
         for tag in tags {
             let path: String
