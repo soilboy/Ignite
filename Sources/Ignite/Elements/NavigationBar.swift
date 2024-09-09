@@ -44,9 +44,8 @@ public struct NavigationBar: BlockElement {
     /// How many columns this should occupy when placed in a section.
     public var columnWidth = ColumnWidth.automatic
 
-    /// The main logo for your site, such as an image or some text. This becomes
-    /// clickable to let users navigate to your homepage.
-    let logo: (any InlineElement)?
+    /// The main default link for the site. As it is a link it can contain any InlineElement
+    let link: Link?
 
     /// An array of items to show in this navigation bar.
     let items: [NavigationItem]
@@ -61,9 +60,15 @@ public struct NavigationBar: BlockElement {
     /// - Parameters:
     ///   - logo: The logo to use in the top-left edge of your bar.
     public init(
-        logo: (any InlineElement)? = nil
+        logo: (any InlineElement)? = nil,
+        link: Link? = nil
     ) {
-        self.logo = logo
+        if let logo {
+            self.link = Link(logo, target: "/")
+        }
+        else{
+            self.link = link
+        }
         self.items = []
     }
 
@@ -75,9 +80,15 @@ public struct NavigationBar: BlockElement {
     /// `NavigationItem` objects.
     public init(
         logo: (any InlineElement)? = nil,
+        link: Link? = nil,
         @ElementBuilder<NavigationItem> items: () -> [NavigationItem]
     ) {
-        self.logo = logo
+        if let logo {
+            self.link = Link(logo, target: "/")
+        }
+        else{
+            self.link = link
+        }
         self.items = items()
     }
 
@@ -124,8 +135,8 @@ public struct NavigationBar: BlockElement {
         Tag("header") {
             Tag("nav") {
                 Group {
-                    if let logo {
-                        Link(logo, target: "/")
+                    if let link {
+                        link
                             .class("navbar-brand")
                     }
 
