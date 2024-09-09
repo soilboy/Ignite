@@ -146,7 +146,7 @@ public struct NavigationBar: BlockElement {
                     }
                     .class("navbar-toggler")
                     .data("bs-toggle", "collapse")
-                    .data("bs-target", "#navbarCollapse")
+                    .data("bs-target", "#navbarCollapse-\(self.attributes.id)")
                     .aria("controls", "navbarCollapse")
                     .aria("expanded", "false")
                     .aria("label", "Toggle navigation")
@@ -176,7 +176,7 @@ public struct NavigationBar: BlockElement {
                         .class("navbar-nav", "mb-2", "mb-md-0", "col", itemAlignment.rawValue)
                     }
                     .class("collapse", "navbar-collapse")
-                    .id("navbarCollapse")
+                    .id("navbarCollapse-\(self.attributes.id)")
                 }
                 .class("container-fluid", columnWidth.className)
             }
