@@ -13,7 +13,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swiftlang/swift-markdown.git", branch: "main"),
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.0.0")
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.0.0"),
+        .package(url: "https://github.com/jpsim/Yams.git", from: "5.1.3")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -21,7 +22,8 @@ let package = Package(
         .target(
             name: "Ignite",
             dependencies: [
-                .product(name: "Markdown", package: "swift-markdown")
+                .product(name: "Markdown", package: "swift-markdown"),
+                .product(name: "Yams", package: "Yams")
             ],
             resources: [
                 .copy("Resources")

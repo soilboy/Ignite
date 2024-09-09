@@ -28,7 +28,7 @@ public protocol MarkdownRenderer {
 
     /// A dictionary of metadata specified at the top of the file as YAML front matter.
     /// See https://jekyllrb.com/docs/front-matter/ for information.
-    var metadata: [String: String] { get }
+    var metadata: [String: Any] { get }
 
     /// Parses Markdown provided as a direct input string.
     /// - Parameters:

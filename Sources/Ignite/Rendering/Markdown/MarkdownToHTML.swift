@@ -7,6 +7,7 @@
 
 import Foundation
 import Markdown
+import Yams
 
 /// A simple Markdown to HTML parser powered by Apple's swift-markdown.
 public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
@@ -25,7 +26,7 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
 
     /// A dictionary of metadata specified at the top of the file as YAML front matter.
     /// See https://jekyllrb.com/docs/front-matter/ for information.
-    public var metadata = [String: String]()
+    public var metadata = [String: Any]()
 
     /// Parses Markdown provided as a direct input string.
     /// - Parameters:
@@ -72,7 +73,12 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     private mutating func processMetadata(for markdown: String) -> String {
         if markdown.starts(with: "---") {
             let parts = markdown.split(separator: "---", maxSplits: 1, omittingEmptySubsequences: true)
-
+            let decoder = YAMLDecoder()
+            //let decoded = try? Yams.compose(yaml: parts[0].description)
+            let decoded = try? Yams.load(yaml: parts[0].description) as? [String: Any]
+            metadata = decoded?.reduce(into: [String: Any](), {$0[$1.key] = $1.value}) ?? [String: Any]()
+            
+            /*
             let header = parts[0].split(separator: "\n", omittingEmptySubsequences: true)
 
             for entry in header {
