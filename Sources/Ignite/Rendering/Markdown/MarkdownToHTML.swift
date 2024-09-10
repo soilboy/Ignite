@@ -74,7 +74,6 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         if markdown.starts(with: "---") {
             let parts = markdown.split(separator: "---", maxSplits: 1, omittingEmptySubsequences: true)
             let decoder = YAMLDecoder()
-            //let decoded = try? Yams.compose(yaml: parts[0].description)
             let decoded = try? Yams.load(yaml: parts[0].description) as? [String: Any]
             metadata = decoded?.reduce(into: [String: Any](), {$0[$1.key] = $1.value}) ?? [String: Any]()
             
@@ -170,8 +169,17 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
                 return ""
             }
         }
-
-        return "<h\(heading.level)>\(headingContent)</h\(heading.level)>"
+        
+        // if tags are present in the header then leave as-is otherwise use it as an tag ID
+        if let found = try? headingContent.contains(Regex("<|>")),
+           found == true
+        {
+            return "<h\(heading.level)>\(headingContent)</h\(heading.level)>"
+        }
+        else{
+            let headingID = headingContent.replacingOccurrences(of: " ", with: "-").lowercased()
+            return "<h\(heading.level) id=\"\(headingID)\">\(headingContent)</h\(heading.level)>"
+        }
     }
 
     /// Processes a block of HTML markup.
