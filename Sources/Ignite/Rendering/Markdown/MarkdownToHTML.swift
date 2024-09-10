@@ -403,6 +403,14 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
         result += "</ul>"
         return result
     }
+    
+    public mutating func visitLineBreak(_ lineBreak: Markdown.LineBreak) -> String {
+        lineBreak.plainText + "<br />"
+    }
+    
+    public func visitSoftBreak(_ softBreak: SoftBreak) -> String {
+        softBreak.plainText + "<br />"
+    }
 }
 
 extension Markup {
