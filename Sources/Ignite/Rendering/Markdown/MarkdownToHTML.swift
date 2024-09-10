@@ -73,20 +73,15 @@ public struct MarkdownToHTML: MarkdownRenderer, MarkupVisitor {
     private mutating func processMetadata(for markdown: String) -> String {
         if markdown.starts(with: "---") {
             let parts = markdown.split(separator: "---", maxSplits: 1, omittingEmptySubsequences: true)
-            let decoder = YAMLDecoder()
-            let decoded = try? Yams.load(yaml: parts[0].description) as? [String: Any]
-            metadata = decoded?.reduce(into: [String: Any](), {$0[$1.key] = $1.value}) ?? [String: Any]()
-            
-            /*
-            let header = parts[0].split(separator: "\n", omittingEmptySubsequences: true)
-
-            for entry in header {
-                let entryParts = entry.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true)
-                guard entryParts.count == 2 else { continue }
-
-                let trimmedValue = entryParts[1].trimmingCharacters(in: .whitespaces)
-                metadata[entryParts[0].trimmingCharacters(in: .whitespaces)] = trimmedValue
+            guard parts.count > 1
+            else{
+                return markdown
             }
+            let decoder = YAMLDecoder()
+            if let decoded = try? Yams.load(yaml: parts[0].description) as? [String: Any]{
+                metadata = decoded.reduce(into: [String: Any](), {$0[$1.key] = $1.value})
+            }
+            
 
             return String(parts[1].trimmingCharacters(in: .whitespacesAndNewlines))
         } else {
